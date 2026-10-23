@@ -37,7 +37,7 @@ def score(job):
  txt=(job['title']+' '+job['description']).lower(); title=job['title'].lower()
  if any(n in title for n in NEGATIVE): return None
  if not any(r in txt for r in ROLE_TERMS): return None
- if not any(l in txt for l in LOC_TERMS): return None
+ # if not any(l in txt for l in LOC_TERMS): return None
  s=45
  if any(t in title for t in ['controller','fp&a','business partner','business finance']):s+=18
  if any(t in title for t in ['senior','lead','manager','trưởng']):s+=12
