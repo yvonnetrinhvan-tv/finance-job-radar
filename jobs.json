@@ -1,32 +1,26 @@
 {
-  "updated_at": "2026-10-23T14:15:32.110616+00:00",
+  "updated_at": "2026-10-23T14:39:00.535927+00:00",
   "queries": [
-    "\"Finance Controller\" \"Ho Chi Minh\" tuyển dụng",
-    "\"FP&A\" \"Ho Chi Minh\" tuyển dụng",
-    "\"Finance Business Partner\" \"Ho Chi Minh\" jobs",
-    "\"Senior Financial Analyst\" \"Ho Chi Minh\" tuyển dụng",
-    "\"Financial Planning and Analysis\" \"Hồ Chí Minh\"",
-    "\"Business Finance\" \"Hồ Chí Minh\" tuyển dụng"
+    "site:careerviet.vn/viec-lam/ \"finance controller\"",
+    "site:careerviet.vn/viec-lam/ \"FP&A\"",
+    "site:topcv.vn/viec-lam/ \"financial controller\"",
+    "site:topcv.vn/viec-lam/ \"finance manager\"",
+    "site:vn.indeed.com/viewjob \"finance controller\"",
+    "site:linkedin.com/jobs/view/ \"finance business partner\" Vietnam",
+    "site:linkedin.com/jobs/view/ \"FP&A\" Vietnam",
+    "site:jobs.lever.co/ \"finance\" \"Vietnam\"",
+    "site:job-boards.greenhouse.io/ \"finance\" \"Vietnam\"",
+    "\"senior financial analyst\" \"Ho Chi Minh\" jobs",
+    "\"Finance Controller\" \"Ho Chi Minh\" jobs",
+    "\"FP&A Manager\" \"Ho Chi Minh\" jobs"
   ],
-  "job_count": 1,
+  "job_count": 0,
+  "diagnostics": {
+    "rss_results": 120,
+    "rejected_url": 120,
+    "rejected_role": 0,
+    "accepted": 0
+  },
   "errors": [],
-  "jobs": [
-    {
-      "title": "Finance | Definition, Types, & Facts | Britannica Money",
-      "url": "https://www.britannica.com/money/finance",
-      "description": "What are the areas of finance? There are three broad areas in finance that have developed specialized institutions, procedures, standards, and goals: business finance, personal finance, and public finance.",
-      "source_published": "Sun, 18 Oct 2026 07:05:00 GMT",
-      "score": 45,
-      "matched_skills": [],
-      "first_seen": "2026-10-23",
-      "last_seen": "2026-10-23",
-      "salary_status": "Chưa xác minh",
-      "weekend_status": "Chưa xác minh",
-      "work_mode": "Chưa xác minh",
-      "opening_status": "Chưa xác minh",
-      "source_type": "Tin tìm thấy qua công cụ tìm kiếm",
-      "source_domain": "www.britannica.com",
-      "user_status": "Chưa xem"
-    }
-  ]
+  "jobs": []
 }
