@@ -1,3 +1,67 @@
+"""Yvonne Finance Job Radar: public search leads, not verified open jobs.
+No API key. The search source may return zero leads; diagnostics explain why.
+"""
+import datetime as dt
+import html
+import json
+import re
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+BASE = Path(__file__).resolve().parent
+DATA = BASE / 'jobs.json'
+NOW = dt.datetime.now(dt.timezone.utc)
+
+# Target job-posting pages rather than broad finance knowledge searches.
+SEARCHES = [
+    'site:careerviet.vn/viec-lam/ "finance controller"',
+    'site:careerviet.vn/viec-lam/ "FP&A"',
+    'site:topcv.vn/viec-lam/ "financial controller"',
+    'site:topcv.vn/viec-lam/ "finance manager"',
+    'site:vn.indeed.com/viewjob "finance controller"',
+    'site:linkedin.com/jobs/view/ "finance business partner" Vietnam',
+    'site:linkedin.com/jobs/view/ "FP&A" Vietnam',
+    'site:jobs.lever.co/ "finance" "Vietnam"',
+    'site:job-boards.greenhouse.io/ "finance" "Vietnam"',
+    '"senior financial analyst" "Ho Chi Minh" jobs',
+    '"Finance Controller" "Ho Chi Minh" jobs',
+    '"FP&A Manager" "Ho Chi Minh" jobs',
+]
+
+# Strict enough to reject magazines, wikis, company homepages and search pages.
+JOB_HOST_PATHS = {
+    'careerviet.vn': ('/viec-lam/',),
+    'topcv.vn': ('/viec-lam/',),
+    'vietnamworks.com': ('/job/', '/viec-lam/',),
+    'linkedin.com': ('/jobs/view/',),
+    'vn.indeed.com': ('/viewjob', '/rc/clk',),
+    'indeed.com': ('/viewjob', '/rc/clk',),
+    'jobs.lever.co': ('/',),
+    'job-boards.greenhouse.io': ('/',),
+    'boards.greenhouse.io': ('/',),
+    'jobs.ashbyhq.com': ('/',),
+    'jobs.smartrecruiters.com': ('/',),
+    'glints.com': ('/vn/opportunities/jobs/',),
+}
+ROLE_PATTERNS = [
+    r'finance\s+controller', r'financial\s+controller', r'\bfp\s*&\s*a\b',
+    r'financial\s+planning', r'finance\s+business\s+partner',
+    r'business\s+finance', r'financial\s+analyst', r'finance\s+manager',
+    r'kiểm soát tài chính', r'phân tích tài chính', r'hoạch định tài chính',
+]
+EXCLUDE_TITLE = [
+    'intern', 'internship', 'fresher', 'new grad', 'graduate program',
+    'junior accountant', 'accounts payable', 'accounts receivable',
+    'kế toán kho', 'kế toán công nợ', 'data entry',
+]
+SKILLS = {
+    'budgeting': ['budget', 'ngân sách'],
+    'forecasting': ['forecast', 'dự báo'],
+    'variance': ['variance', 'chênh lệch'],
     'management_reporting': ['management reporting', 'báo cáo quản trị'],
     'cost_control': ['cost control', 'kiểm soát chi phí'],
     'working_capital': ['working capital', 'vốn lưu động'],
