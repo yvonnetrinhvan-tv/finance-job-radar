@@ -139,13 +139,19 @@ def main():
            if j.get('url') and valid_job_url(j['url']) and score(j) is not None}
     seen, errors = {}, []
     counts = {'rss_results': 0, 'rejected_url': 0, 'rejected_role': 0, 'accepted': 0}
+    rejected_url_samples = []
+    source_hosts = {}
     for query in SEARCHES:
         try:
             results = fetch(query)
             counts['rss_results'] += len(results)
             for job in results:
+                host = urllib.parse.urlparse(job['url']).hostname or '(no host)'
+                source_hosts[host] = source_hosts.get(host, 0) + 1
                 if not valid_job_url(job['url']):
                     counts['rejected_url'] += 1
+                    if len(rejected_url_samples) < 15:
+                        rejected_url_samples.append({'title': job['title'][:120], 'url': job['url'][:500]})
                     continue
                 match = score(job)
                 if match is None:
@@ -183,7 +189,9 @@ def main():
             seen[uid] = job
     jobs = sorted(seen.values(), key=lambda j: (j.get('last_seen', ''), j.get('score', 0)), reverse=True)[:500]
     output = {'updated_at': NOW.isoformat(), 'queries': SEARCHES,
-              'job_count': len(jobs), 'diagnostics': counts, 'errors': errors, 'jobs': jobs}
+              'job_count': len(jobs), 'diagnostics': counts,
+              'source_hosts': source_hosts, 'rejected_url_samples': rejected_url_samples,
+              'errors': errors, 'jobs': jobs}
     DATA.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding='utf-8')
     print('Job leads:', len(jobs), '| Diagnostics:', counts, '| Errors:', errors)
 
