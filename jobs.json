@@ -1,131 +1,23 @@
 {
-  "updated_at": "2026-10-23T15:20:29.095333+00:00",
+  "updated_at": "2026-10-24T01:03:38.244368+00:00",
   "queries": [
-    "site:careerviet.vn/viec-lam/ \"finance controller\"",
-    "site:careerviet.vn/viec-lam/ \"FP&A\"",
-    "site:topcv.vn/viec-lam/ \"financial controller\"",
-    "site:topcv.vn/viec-lam/ \"finance manager\"",
-    "site:vn.indeed.com/viewjob \"finance controller\"",
-    "site:linkedin.com/jobs/view/ \"finance business partner\" Vietnam",
-    "site:linkedin.com/jobs/view/ \"FP&A\" Vietnam",
-    "site:jobs.lever.co/ \"finance\" \"Vietnam\"",
-    "site:job-boards.greenhouse.io/ \"finance\" \"Vietnam\"",
-    "\"senior financial analyst\" \"Ho Chi Minh\" jobs",
-    "\"Finance Controller\" \"Ho Chi Minh\" jobs",
-    "\"FP&A Manager\" \"Ho Chi Minh\" jobs"
+    "Arbeitnow structured public job feed"
   ],
   "job_count": 0,
   "diagnostics": {
-    "rss_results": 120,
-    "rejected_url": 120,
-    "rejected_role": 0,
+    "rss_results": 900,
+    "rejected_url": 0,
+    "rejected_role": 900,
     "accepted": 0
   },
   "source_hosts": {
-    "update.code.visualstudio.com": 12,
-    "code.visualstudio.com": 48,
-    "corporatefinanceinstitute.com": 2,
-    "en.wikipedia.org": 1,
-    "fpacert.financialprofessionals.org": 1,
-    "www.workday.com": 1,
-    "www.sap.com": 1,
-    "www.ibm.com": 1,
-    "fpa-trends.com": 1,
-    "fpnaprofessionals.com": 1,
-    "www.datarails.com": 1,
-    "www.investopedia.com": 1,
-    "www.accounting.com": 1,
-    "www.indeed.com": 4,
-    "www.netsuite.com": 1,
-    "ramp.com": 1,
-    "www.coursera.org": 1,
-    "unanswered.io": 1,
-    "www.wallstreetmojo.com": 1,
-    "www.spendesk.com": 1,
-    "www.linkedin.com": 2,
-    "www.roberthalf.com": 1,
-    "www.simplyhired.com": 1,
-    "jobtoday.com": 1,
-    "www.glassdoor.com": 1,
-    "jooble.org": 1,
-    "www.salary.com": 1,
-    "www.freepeople.com": 4,
-    "foreignpolicy.com": 2,
-    "www.fp-usa.com": 4,
-    "fp.infosysapps.com": 2,
-    "www.fpmarkets.com": 4,
-    "www.fptrading.com": 4,
-    "www.thegrovesenior.com": 1,
-    "ggcity.org": 1,
-    "www.after55.com": 2,
-    "www.seniorly.com": 1,
-    "www.apartments.com": 2,
-    "seniorcenter.us": 1,
-    "www.apartmenthomeliving.com": 1,
-    "www.seniorguidance.org": 1
+    "www.arbeitnow.com": 300,
+    "www.arbeitnow.co.uk": 150,
+    "www.arbeitnow.fr": 150,
+    "www.arbeitnow.ch": 150,
+    "www.arbeitnow.nl": 150
   },
-  "rejected_url_samples": [
-    {
-      "title": "update.code.visualstudio.com",
-      "url": "https://update.code.visualstudio.com/1.139.1/win32-x64-user/stable"
-    },
-    {
-      "title": "Portable mode - Visual Studio Code",
-      "url": "https://code.visualstudio.com/docs/setup/portable"
-    },
-    {
-      "title": "Visual Studio Code 1.141",
-      "url": "https://code.visualstudio.com/updates/v1_141"
-    },
-    {
-      "title": "update.code.visualstudio.com",
-      "url": "https://update.code.visualstudio.com/1.70.2/win32-x64/stable"
-    },
-    {
-      "title": "Visual Studio Code",
-      "url": "https://code.visualstudio.com/llms.txt"
-    },
-    {
-      "title": "Enhanced colorization - Visual Studio Code",
-      "url": "https://code.visualstudio.com/docs/cpp/colorization-cpp"
-    },
-    {
-      "title": "Download Visual Studio Code",
-      "url": "https://code.visualstudio.com/download"
-    },
-    {
-      "title": "Context Menus | Visual Studio Code Extension API",
-      "url": "https://code.visualstudio.com/api/ux-guidelines/context-menus"
-    },
-    {
-      "title": "Using Proposed API | Visual Studio Code Extension API",
-      "url": "https://code.visualstudio.com/api/advanced-topics/using-proposed-api"
-    },
-    {
-      "title": "Visual Studio Code - The open source AI code editor | Your home for ...",
-      "url": "https://code.visualstudio.com/"
-    },
-    {
-      "title": "Financial Planning & Analysis (FP&A) - Guide & Role",
-      "url": "https://corporatefinanceinstitute.com/resources/career/financial-planning-and-analysis-fpa/"
-    },
-    {
-      "title": "FP&A - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/FP%26A"
-    },
-    {
-      "title": "What is FP&A | Financial Planning & Analysis Meaning",
-      "url": "https://fpacert.financialprofessionals.org/certification/what-is-fp-a"
-    },
-    {
-      "title": "Enterprise Financial Planning FP&A Software | Workday US",
-      "url": "https://www.workday.com/en-us/products/adaptive-planning/financial-planning/overview.html"
-    },
-    {
-      "title": "Financial Planning & Analysis Professional (FPAP™) Certification",
-      "url": "https://corporatefinanceinstitute.com/certifications/financial-planning-analysis-professional-fpap/"
-    }
-  ],
+  "rejected_url_samples": [],
   "errors": [],
   "jobs": []
 }
