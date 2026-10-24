@@ -17,20 +17,7 @@ DATA = BASE / 'jobs.json'
 NOW = dt.datetime.now(dt.timezone.utc)
 
 # Target job-posting pages rather than broad finance knowledge searches.
-SEARCHES = [
-    'site:careerviet.vn/viec-lam/ "finance controller"',
-    'site:careerviet.vn/viec-lam/ "FP&A"',
-    'site:topcv.vn/viec-lam/ "financial controller"',
-    'site:topcv.vn/viec-lam/ "finance manager"',
-    'site:vn.indeed.com/viewjob "finance controller"',
-    'site:linkedin.com/jobs/view/ "finance business partner" Vietnam',
-    'site:linkedin.com/jobs/view/ "FP&A" Vietnam',
-    'site:jobs.lever.co/ "finance" "Vietnam"',
-    'site:job-boards.greenhouse.io/ "finance" "Vietnam"',
-    '"senior financial analyst" "Ho Chi Minh" jobs',
-    '"Finance Controller" "Ho Chi Minh" jobs',
-    '"FP&A Manager" "Ho Chi Minh" jobs',
-]
+SEARCHES = ['Arbeitnow structured public job feed']
 
 # Strict enough to reject magazines, wikis, company homepages and search pages.
 JOB_HOST_PATHS = {
@@ -83,49 +70,49 @@ def canonical(url):
 
 
 def valid_job_url(url):
-    parsed = urllib.parse.urlparse(url)
-    if parsed.scheme not in ('http', 'https'):
-        return False
-    host = parsed.hostname.lower().removeprefix('www.') if parsed.hostname else ''
-    path = parsed.path.lower()
-    return any((host == domain or host.endswith('.' + domain)) and
-               any(path.startswith(prefix) for prefix in prefixes) and
-               path.strip('/') for domain, prefixes in JOB_HOST_PATHS.items())
+    p = urllib.parse.urlparse(url)
+    return p.scheme == 'https' and bool(p.hostname) and bool(p.path.strip('/'))
 
 
 def fetch(query):
-    url = 'https://www.bing.com/search?' + urllib.parse.urlencode(
-        {'q': query, 'format': 'rss', 'count': 50})
-    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    with urllib.request.urlopen(req, timeout=20) as response:
-        body = response.read(2_000_000)
-    root = ET.fromstring(body)
-    return [{
-        'title': clean(item.findtext('title')),
-        'url': clean(item.findtext('link')),
-        'description': clean(item.findtext('description')),
-        'source_published': clean(item.findtext('pubDate')),
-    } for item in root.findall('./channel/item')]
+    """Read publicly listed job posts from a structured board API, not Bing."""
+    result = []
+    for page in range(1, 4):
+        url = 'https://www.arbeitnow.com/api/job-board-api?' + urllib.parse.urlencode({'page': page})
+        req = urllib.request.Request(url, headers={'User-Agent': 'YvonneJobRadar/3.0', 'Accept': 'application/json'})
+        with urllib.request.urlopen(req, timeout=25) as response:
+            payload = json.loads(response.read(5000000).decode('utf-8'))
+        for entry in payload.get('data', []):
+            result.append({
+                'title': clean(entry.get('title')),
+                'url': str(entry.get('url') or ''),
+                'description': clean(entry.get('description')),
+                'source_published': str(entry.get('created_at') or ''),
+                'company': clean(entry.get('company_name')),
+                'location': clean(entry.get('location')),
+            })
+        if not payload.get('links', {}).get('next'):
+            break
+    return result
 
 
 def score(job):
-    title, text = job['title'].lower(), (job['title'] + ' ' + job['description']).lower()
+    title = job['title'].lower()
+    text = (job['title'] + ' ' + job['description']).lower()
     if any(x in title for x in EXCLUDE_TITLE):
         return None
-    # Role must be in title (not just a mention deep inside an article).
     if not any(re.search(pattern, title) for pattern in ROLE_PATTERNS):
         return None
+    # HCMC must appear in the board's explicit location field.
+    if not any(loc in job.get('location', '').lower() for loc in LOCATIONS):
+        return None
     matched = [name for name, terms in SKILLS.items() if any(term in text for term in terms)]
-    result = 45
+    result = 48
     if any(word in title for word in ('controller', 'fp&a', 'business partner', 'business finance')):
         result += 18
     if any(word in title for word in ('senior', 'lead', 'manager', 'trưởng')):
         result += 12
     result += min(len(matched) * 3, 18)
-    if any(loc in text for loc in LOCATIONS):
-        result += 5
-    if any(word in title for word in ('assistant', 'junior', 'staff')):
-        result -= 20
     return max(0, min(result, 100)), matched
 
 
@@ -135,8 +122,7 @@ def main():
     except (ValueError, OSError):
         previous = []
     # Drop any stale false positives from the old collector (such as Britannica).
-    old = {canonical(j['url']): j for j in previous
-           if j.get('url') and valid_job_url(j['url']) and score(j) is not None}
+    old = {}  # Do not preserve past RSS items or stale unverified listings.
     seen, errors = {}, []
     counts = {'rss_results': 0, 'rejected_url': 0, 'rejected_role': 0, 'accepted': 0}
     rejected_url_samples = []
@@ -167,10 +153,8 @@ def main():
                     last_seen=NOW.date().isoformat(),
                     salary_status='Chưa xác minh', weekend_status='Chưa xác minh',
                     work_mode='Chưa xác minh', opening_status='Chưa xác minh',
-                    location_status=('Có dấu hiệu TP.HCM' if any(loc in
-                                     (job['title'] + ' ' + job['description']).lower()
-                                     for loc in LOCATIONS) else 'Chưa xác minh'),
-                    source_type='Tin tìm thấy qua công cụ tìm kiếm; chưa xác minh',
+                    location_status='Địa điểm TP.HCM ghi trên tin',
+                    source_type='Arbeitnow public jobs API; chưa xác minh còn mở',
                     source_domain=urllib.parse.urlparse(job['url']).hostname or '',
                     user_status=prev.get('user_status', 'Chưa xem'),
                 )
@@ -179,14 +163,7 @@ def main():
         except (urllib.error.URLError, TimeoutError, ET.ParseError, ValueError) as exc:
             errors.append(f'{query}: {type(exc).__name__}: {exc}')
         time.sleep(0.5)
-    # Keep previously detected valid leads for up to 30 days, without treating them as active vacancies.
-    for uid, job in old.items():
-        try:
-            days = (NOW.date() - dt.date.fromisoformat(job['last_seen'])).days
-        except (KeyError, ValueError):
-            continue
-        if uid not in seen and days <= 30:
-            seen[uid] = job
+    # No carry-forward: old search-engine false positives are removed.
     jobs = sorted(seen.values(), key=lambda j: (j.get('last_seen', ''), j.get('score', 0)), reverse=True)[:500]
     output = {'updated_at': NOW.isoformat(), 'queries': SEARCHES,
               'job_count': len(jobs), 'diagnostics': counts,
