@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-21T08:15:25.983004+00:00",
+  "updated_at": "2026-11-22T07:57:58.889086+00:00",
   "queries": [
     "Arbeitnow structured public job feed"
   ],
@@ -13,7 +13,7 @@
   "source_hosts": {},
   "rejected_url_samples": [],
   "errors": [
-    "Arbeitnow structured public job feed: JSONDecodeError: Unterminated string starting at: line 1 column 4370981 (char 4370980)"
+    "Arbeitnow structured public job feed: JSONDecodeError: Unterminated string starting at: line 1 column 4403314 (char 4403313)"
   ],
   "jobs": []
 }
