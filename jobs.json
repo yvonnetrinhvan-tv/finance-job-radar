@@ -1,19 +1,23 @@
 {
-  "updated_at": "2026-11-23T08:58:23.641952+00:00",
+  "updated_at": "2026-11-24T10:53:42.821318+00:00",
   "queries": [
     "Arbeitnow structured public job feed"
   ],
   "job_count": 0,
   "diagnostics": {
-    "rss_results": 0,
+    "rss_results": 900,
     "rejected_url": 0,
-    "rejected_role": 0,
+    "rejected_role": 900,
     "accepted": 0
   },
-  "source_hosts": {},
+  "source_hosts": {
+    "www.arbeitnow.com": 300,
+    "www.arbeitnow.co.uk": 150,
+    "www.arbeitnow.fr": 150,
+    "www.arbeitnow.ch": 150,
+    "www.arbeitnow.nl": 150
+  },
   "rejected_url_samples": [],
-  "errors": [
-    "Arbeitnow structured public job feed: JSONDecodeError: Unterminated string starting at: line 1 column 4365330 (char 4365329)"
-  ],
+  "errors": [],
   "jobs": []
 }
